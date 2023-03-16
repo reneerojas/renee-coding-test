@@ -1,5 +1,5 @@
 <template>
-     <div class="space-y-5 px-6">
+    <div class="space-y-5 px-6">
         <div class="relative flex items-start" v-for="(standard, index) in standards" :key="index">
             <div class="flex h-6 items-center">
                 <input
@@ -7,7 +7,7 @@
                     name="comments"
                     type="checkbox"
                     class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                    @change="addStandard(standard)"
+                    @change="toggleStandard(standard)"
                 />
             </div>
             <div class="ml-3 text-sm leading-6">
@@ -15,16 +15,22 @@
                 <p class="text-gray-500">{{ standard.description }}</p>
             </div>
         </div>
-     </div>
+    </div>
 </template>
 
 <script>
-    export default {
-        props: ['standards'],
-        methods: {
-            addStandard (standard) {
+import {mapGetters} from "vuex";
+export default {
+    props: ['standards'],
+    computed: {
+        ...mapGetters('standards', ['isSelected'])
+    },
+    methods: {
+        toggleStandard (standard) {
+            this.isSelected(standard.code)?
+                this.$store.dispatch('standards/removeItemFromStandards', standard):
                 this.$store.dispatch('standards/addItemToStandards', standard)
-            }
         }
     }
+}
 </script>
